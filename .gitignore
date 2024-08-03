@@ -140,10 +140,10 @@ src/utils/debug/*
 src/utils/error/*
 
 #KNEX
-src/db/.knexfile.development.ts
-src/db/.knexfile.qa.ts
-src/db/.knexfile.stage.ts
-src/db/.knexfile.production.ts
-src/db/.knexfile.production-temp.ts
+# src/db/.knexfile.development.ts
+# src/db/.knexfile.qa.ts
+# src/db/.knexfile.stage.ts
+# src/db/.knexfile.production.ts
+# src/db/.knexfile.production-temp.ts
 
 package-lock.json
