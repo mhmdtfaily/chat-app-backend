@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import healthcheckRoute from './routes/health-check.route';
+import user from './routes/user';
 
 import { PORT,CORS_CREDENTIALS,CORS_ORIGIN  } from './config';
+import errorMiddleware from './middlewares/error.middleware';
 
 try {
   const app: express.Application = express();
@@ -15,6 +17,12 @@ try {
    * API Routes
    */
   app.use('/health-check', healthcheckRoute);
+  app.use('/user', user);
+
+    /**
+   * Initialize the error middleware to catch all exceptions
+   */
+    app.use(errorMiddleware);
 
   const port = PORT || 3000;
   
