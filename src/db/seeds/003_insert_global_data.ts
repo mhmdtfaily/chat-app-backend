@@ -3,10 +3,10 @@ import bcrypt from 'bcrypt';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries in the user table
-  await knex('user').del();
+  await knex('users').del();
 
   // Inserts seed entries
-  await knex('user').insert([
+  await knex('users').insert([
     {
       full_name: 'John Doe',
       email: 'john.doe@example.com',

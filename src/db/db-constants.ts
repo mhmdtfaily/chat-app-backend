@@ -1,12 +1,12 @@
 export const tables = {
-  USER: 'user',
+  USER: 'users',
   CHATS: 'chats',
   MESSAGES: 'messages',
-  USER_CHATS:'user_chats'
+
  
 };
 
-export const user = {
+export const users = {
   FULL_NAME: 'full_name',
   EMAIL: 'email',
   PASSWORD: 'password',
