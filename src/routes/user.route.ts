@@ -7,6 +7,7 @@ import { HttpException } from '../exceptions/HttpException';
 
 
 const router = Router();
+router.use(validationMiddleware);
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {

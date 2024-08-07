@@ -1,4 +1,5 @@
 import { Chat } from "../custom-types/dtos/chat.dto.type";
+import { ConversationResponse } from "../custom-types/response/conversation.type";
 import chatDao from "../dao/chats.dao";
 
 async function sendMessage(chatId: string, senderId: string, content: string) {}
@@ -21,6 +22,12 @@ async function createChat(user1Id: string, user2Id: string) {
         }
     }
 
+    async function getConversationByChatId(userId: string, chatId: string): Promise<ConversationResponse> {
+        const conversation = await chatDao.getConversationByChatId(userId, chatId);
+        return conversation;
+      }
+
 export default {
   createChat,
+  getConversationByChatId
 };

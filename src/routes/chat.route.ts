@@ -4,8 +4,10 @@ import { UserResponse } from "../custom-types/response/user.type";
 import userService from "../services/users.service";
 import { DefaultResponse } from "../custom-types/response/default.type";
 import chatService from "../services/chat.service";
+import { HttpException } from "../exceptions/HttpException";
 
 const router = Router();
+router.use(validationMiddleware);
 
 // Route to send a message
 router.post(
@@ -57,5 +59,25 @@ router.post(
     }
   }
 );
+
+router.get('/conversation/:chatId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.body.userId;
+    const chatId = req.params.chatId;
+    
+    if (!userId) throw new HttpException(400, "missing parameter 'userId'");
+    if (!chatId) throw new HttpException(400, "missing parameter 'chatId'");
+
+    const conversation = await chatService.getConversationByChatId(userId, chatId);
+    
+    res.status(200).json({
+      isSuccess: true,
+      message: 'Conversation retrieved successfully',
+      data: conversation
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
