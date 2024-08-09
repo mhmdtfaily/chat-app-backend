@@ -10,6 +10,13 @@ async function getUsers(): Promise<User[]> {
   ]);
 }
 
+async function getUser(id: string): Promise<User> {
+  return await db("users")
+    .select(["users.id", "users.full_name", "users.email"])
+    .where("users.id", id)
+    .first();
+}
+
 async function getUserByEmail(email: string) {
   return await db("users").where({ email }).first();
 }
@@ -92,4 +99,5 @@ export default {
   createUser,
   updateUserStatus,
   getChatsByUserId,
+  getUser,
 };

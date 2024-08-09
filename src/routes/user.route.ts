@@ -28,6 +28,29 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+router.get(
+  "/profile/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      //validate that the user_id parameter is present
+      if (!req.params.id)
+        throw new HttpException(400, "missing parameter 'user_id'");
+
+      const my_id: string = req.params.id;
+      const data: UserResponse = await userService.getUser(my_id);
+      const responseData: DefaultResponse = {
+        isSuccess: true,
+        message: "Get User successful",
+        data: data,
+      };
+
+      res.status(200).json(responseData);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.post(
   "/login-or-create",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +81,6 @@ router.get(
   "/:id/chats",
   async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-      //validate that the user_id parameter is present
       if (!req.params.id)
         throw new HttpException(400, "missing parameter 'user_id'");
       const user_id: string = req.params.id;
@@ -66,7 +88,7 @@ router.get(
       const data: ChatResponse[] = await userService.getChatsByUserId(user_id);
       const response: DefaultResponse = {
         isSuccess: true,
-        message: "Burn token successful",
+        message: "chats return  successful",
         data: data,
       };
 

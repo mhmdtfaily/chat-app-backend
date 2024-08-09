@@ -22,6 +22,21 @@ async function getUsers(my_id: string): Promise<UserResponse[]> {
 
   return usersResponse;
 }
+async function getUser(id: string): Promise<UserResponse> {
+  const user: User = await usersDao.getUser(id);
+
+  if (!user) {
+    throw new Error(`User with id ${id} not found`);
+  }
+
+  const usersResponse: UserResponse = {
+    id: user.id,
+    full_name: user.full_name,
+    email: user.email,
+  };
+
+  return usersResponse;
+}
 
 async function checkOrCreateUser(
   email: string,
@@ -54,4 +69,5 @@ export default {
   getUsers,
   checkOrCreateUser,
   getChatsByUserId,
+  getUser,
 };
