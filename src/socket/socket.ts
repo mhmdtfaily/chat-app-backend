@@ -14,23 +14,26 @@ export const initializeSocket = (server: HttpServer) => {
 
   io.on("connection", (socket) => {
     console.log("a user connected");
-  
-    socket.on("message", (msg) => {
-      try {
-        io.emit("message", msg);
-      } catch (err) {
-        console.error("Error handling message event", err);
-      }
+
+    socket.on("joinRoom", (roomId) => {
+      socket.join(roomId);
+      console.log(`User joined room ${roomId}`);
     });
-  
+
+    socket.on("message", (msg, roomId) => {
+      io.to(roomId).emit("message", msg); // Send the message only to clients in the room
+      io.emit("newMessage", { roomId, msg }); // Notify all users of a new message
+      console.log(`message ${roomId} ${msg}`);
+    });
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
-  
+
     socket.on("error", (err) => {
       console.error("Socket.IO error", err);
     });
   });
-  
+
   return io;
 };

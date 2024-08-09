@@ -1,33 +1,12 @@
 import { NextFunction, Request, Response, Router } from "express";
 import validationMiddleware from "../middlewares/validation.middleware";
-import { UserResponse } from "../custom-types/response/user.type";
-import userService from "../services/users.service";
 import { DefaultResponse } from "../custom-types/response/default.type";
 import chatService from "../services/chat.service";
 import { HttpException } from "../exceptions/HttpException";
+import { SaveMessageRequest } from "../custom-types/request/conversation.type";
 
 const router = Router();
 router.use(validationMiddleware);
-
-// Route to send a message
-router.post(
-  "/send",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { chatId, senderId, content } = req.body;
-
-    if (!chatId || !senderId || !content) {
-      return res
-        .status(400)
-        .json({ error: "chatId, senderId, and content are required" });
-    }
-
-    try {
-      res.status(201).json();
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 router.post(
   "/create",
@@ -35,7 +14,7 @@ router.post(
     try {
       const { user1Id, user2Id } = req.body;
 
-      console.log(user1Id)
+      console.log(user1Id);
 
       if (!user1Id || !user2Id) {
         return res.status(400).json({ error: "User IDs are required" });
@@ -60,24 +39,60 @@ router.post(
   }
 );
 
-router.get('/conversation/:chatId', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userId = req.body.userId;
-    const chatId = req.params.chatId;
-    
-    if (!userId) throw new HttpException(400, "missing parameter 'userId'");
-    if (!chatId) throw new HttpException(400, "missing parameter 'chatId'");
+router.get(
+  "/conversation/:chatId/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const chatId = req.params.chatId;
+      const userId = req.params.userId;
 
-    const conversation = await chatService.getConversationByChatId(userId, chatId);
-    
-    res.status(200).json({
-      isSuccess: true,
-      message: 'Conversation retrieved successfully',
-      data: conversation
-    });
-  } catch (error) {
-    next(error);
+      if (!userId) throw new HttpException(400, "missing parameter 'userId'");
+      if (!chatId) throw new HttpException(400, "missing parameter 'chatId'");
+
+      const conversation = await chatService.getConversationByChatId(
+        userId,
+        chatId
+      );
+
+      res.status(200).json({
+        isSuccess: true,
+        message: "Conversation retrieved successfully",
+        data: conversation,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
+
+router.post(
+  "/send-message",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const request: SaveMessageRequest = req.body;
+
+      if (!request.sender_id)
+        throw new HttpException(400, "missing parameter 'senderId'");
+      if (!request.chat_id)
+        throw new HttpException(400, "missing parameter 'chatId'");
+      if (!request.content.trim())
+        throw new HttpException(400, "missing parameter 'content'");
+
+      const conversation = await chatService.saveMessage(
+        request.sender_id,
+        request.chat_id,
+        request.content
+      );
+
+      res.status(200).json({
+        isSuccess: true,
+        message: "Conversation retrieved successfully",
+        data: conversation,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
