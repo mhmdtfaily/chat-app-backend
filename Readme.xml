@@ -1,0 +1,35 @@
+# Chat Application
+
+## Overview
+
+This project is a chat application that uses Node.js and PostgreSQL. Follow these instructions to set up and run the project.
+
+## Prerequisites
+
+1. **Node.js**
+   - Download and install [Node.js](https://nodejs.org/).
+
+2. **PostgreSQL**
+   - Download and install [PostgreSQL](https://www.postgresql.org/download/).
+   - Optionally, use [pgAdmin](https://www.pgadmin.org/download/) for database management.
+   - Create database with exactly this name chat_app
+  #Configure the Database Connection
+   Ensure the following properties are set:
+  check the :  .env.development.local
+  to set the password of the databaase you have 
+  and the port of the db
+## Setup Instructions
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/mhmdtfaily/chat-app-backend.git
+   cd chat-app-backend
+   Install Dependencies
+   - npm install
+   - npm run migrate:dev
+   - npm run seed:dev
+   - npm run dev
+   
+ 
+  
+   
